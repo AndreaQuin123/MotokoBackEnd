@@ -4,7 +4,7 @@ import Result "mo:base/Result";
 
 actor Votacion {
 
-    // Define a type for the options
+    // Definir el tipo de cada opcion (como un struct)
     type Opcion = {
         id: Nat;
         descripcion: Text;
@@ -17,11 +17,11 @@ actor Votacion {
 
     type ResultadoVoto = Result.Result<Text, ErrorOpcion>;
 
-    // State variables
+    // Declarando variables
     stable var opciones: [Opcion] = [];
     stable var siguienteOpcionId: Nat = 0;
 
-    // Add a voting option
+    // Agregar opcion para votar
     public func agregarOpcion(descripcion: Text): async Opcion {
         let nuevaOpcion: Opcion = {
             id = siguienteOpcionId;
@@ -33,18 +33,18 @@ actor Votacion {
         return nuevaOpcion;
     };
 
-    // Get all voting options
+    // Imprimir todas las opciones
     public query func obtenerOpciones(): async [Opcion] {
         return opciones;
     };
 
-    // Delete all options
+    // Eliminar todas las opciones (para empezar de nuevo)
     public func eliminarTodasOpciones(): async () {
         opciones := [];
         siguienteOpcionId := 0;
     };
 
-    // Vote for an option
+    // Votar por una opcion
     public func votar(opcionId: Nat): async ResultadoVoto {
         var encontrado = false;
         opciones := Array.map<Opcion, Opcion>(opciones, func(opcion) {
@@ -63,7 +63,7 @@ actor Votacion {
         }
     };
 
-    // Delete a vote
+    // Eliminar UN voto
     public func eliminarVoto(opcionId: Nat): async ResultadoVoto {
         var encontrado = false;
         var opcionesActualizadas = Array.map<Opcion, Opcion>(opciones, func(opcion) {
@@ -83,14 +83,14 @@ actor Votacion {
         }
     };
 
-    // Reset all votes
+    // RESETEAR todos los votos
     public func reiniciarVotos(): async () {
         opciones := Array.map<Opcion, Opcion>(opciones, func(opcion) {
             return { id = opcion.id; descripcion = opcion.descripcion; votos = 0 };
         });
     };
 
-    // Count all votes and give the option with the best amount of votes
+    // Contar todos los votos y dictar el ganador
     public query func obtenerGanador(): async ?Opcion {
         if (Array.size(opciones) == 0) {
             return null;
