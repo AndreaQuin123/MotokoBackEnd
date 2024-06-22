@@ -27,7 +27,7 @@ actor Votacion {
             id = siguienteOpcionId;
             descripcion = descripcion;
             votos = 0;
-        };
+        }; 
         opciones := Array.append<Opcion>(opciones, [nuevaOpcion]);
         siguienteOpcionId := siguienteOpcionId + 1;
         return nuevaOpcion;
